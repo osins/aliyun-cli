@@ -1,6 +1,9 @@
 package service
 
 import (
+	"errors"
+	"fmt"
+
 	openapi "github.com/alibabacloud-go/darabonba-openapi/v2/client"
 	ecs20140526 "github.com/alibabacloud-go/ecs-20140526/v3/client"
 	util "github.com/alibabacloud-go/tea-utils/v2/service"
@@ -42,16 +45,14 @@ func (s *SecurityGroups) createClient(accessKeyId *string, accessKeySecret *stri
 func (s *SecurityGroups) Run(args []*string) (_err error) {
 	if len(args) < 5 {
 		log.Error("参数不正确, 依次为: RegionId, SecurityGroupId, SecurityGroupRuleId, SourceCidrIp, PortRange, IpProtocol")
-		return &tea.SDKError{
-			Message: tea.String("参数不正确, 依次为: RegionId, SecurityGroupId, SecurityGroupRuleId, SourceCidrIp, PortRange, IpProtocol"),
-		}
+		return errors.New("参数不正确, 依次为: RegionId, SecurityGroupId, SecurityGroupRuleId, SourceCidrIp, PortRange, IpProtocol")
 	}
 
 	client, _err := s.createClient(&s.conf.Access.AccessKeyId, &s.conf.Access.AccessKeySecret)
 	if _err != nil {
 		log.Errorf("创建客户端失败，%s", _err.Error())
 
-		return _err
+		return errors.New("参数不正确, 依次为: RegionId, SecurityGroupId, SecurityGroupRuleId, SourceCidrIp, PortRange, IpProtocol")
 	}
 
 	modifySecurityGroupRuleRequest := &ecs20140526.ModifySecurityGroupRuleRequest{
@@ -70,12 +71,13 @@ func (s *SecurityGroups) Run(args []*string) (_err error) {
 				_e = r
 			}
 		}()
+
 		// 复制代码运行请自行打印 API 的返回值
 		_, _err = client.ModifySecurityGroupRuleWithOptions(modifySecurityGroupRuleRequest, runtime)
 		if _err != nil {
 			log.Errorf("api运行失败, %s", _err.Error())
 
-			return _err
+			return errors.New("参数不正确, 依次为: RegionId, SecurityGroupId, SecurityGroupRuleId, SourceCidrIp, PortRange, IpProtocol")
 		}
 
 		return nil
@@ -95,11 +97,13 @@ func (s *SecurityGroups) Run(args []*string) (_err error) {
 		if _err != nil {
 			log.Errorf("api运行失败, %s", _err.Error())
 
-			return _err
+			return fmt.Errorf("api运行失败, %s", _err.Error())
 		}
 
 		log.Errorf("api运行失败, %s", *result)
+
+		return fmt.Errorf("api运行失败, %s", *result)
 	}
 
-	return _err
+	return nil
 }
