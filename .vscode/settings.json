@@ -1,0 +1,10 @@
+{
+    "DockerRun.DisableDockerrc": true,
+    "DockerRun.Containers": [
+        "3756d3af1435",
+        "86f90b7dd386"
+    ],
+    "go.executable.path": "/opt/go/bin/go",
+    "go.gopath": "/root/local-code/aliyun-cli",
+    "go.goroot": "/opt/go"
+}
