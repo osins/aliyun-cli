@@ -26,7 +26,7 @@ func main() {
 	}
 
 	switch api := os.Args[1:][0]; api {
-	case "ModifySecurityGroupRuleWithOptions":
+	case "ModifySecurityGroupRule":
 		sg := service.NewSecurityGroups(aliyunConfig)
 		err := sg.Run(tea.StringSlice(os.Args[1:]))
 		if err != nil {
