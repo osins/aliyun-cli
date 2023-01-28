@@ -100,5 +100,6 @@ func (s *SecurityGroups) Run(args []*string) (_err error) {
 
 		log.Errorf("api运行失败, %s", *result)
 	}
+
 	return _err
 }
