@@ -26,9 +26,15 @@ func main() {
 	params := tea.StringSlice(os.Args[1:])
 
 	commands := service.NewCommands()
-	err := commands[commandString].Run(params)
-	if err != nil {
-		log.Errorf(err.Error())
+	if cli, ok := commands[commandString]; ok {
+		err := cli.Run(params)
+		if err != nil {
+			log.Errorf(err.Error())
+			os.Exit(1)
+			return
+		}
+	} else {
+		log.Errorf("您要执行的命令: %s, 不存在.", commandString)
 		os.Exit(1)
 		return
 	}
